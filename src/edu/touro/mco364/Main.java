@@ -12,26 +12,62 @@ class Zigwig implements Serializable{
     }
 }
 
+class MAL implements Serializable
+{
+    int [] bs = new int[100];
+    int size;
+
+    // custom serizlaition (the phydical sturcture is not equal to logical sturcture)
+    private void writeObject(java.io.ObjectOutputStream out)
+            throws IOException
+    {
+        out.defaultWriteObject();
+        out.write(size);
+        for (int i=0;i<size;i++)
+            out.write(bs[i]);
+
+    }
+    private void readObject(java.io.ObjectInputStream in)
+            throws IOException, ClassNotFoundException{
+
+        in.defaultReadObject();
+        size = in.readInt();
+        bs = new int[size];
+
+        for (int i =0;i<size;i++)
+            bs[i] = in.readInt();
+
+    }
+    private void readObjectNoData()
+            throws ObjectStreamException{
+
+    }
+}
+
+
 public class Main {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         ObjectOutputStream oos = new ObjectOutputStream(
-                new FileOutputStream("data.obj")); // Decorator Design Pattern
+                new FileOutputStream("data.judah")); // Decorator Design Pattern
 
-        Object obj = new Zigwig(99, "NinetyNine");//"Bob the Builder";
-        oos.writeObject( obj );
+        MAL mal = new MAL();
+        mal.bs[0] = 9;
+        mal.size = 1;
+        //Object obj = new Zigwig(99, "NinetyNine");//"Bob the Builder";
+        oos.writeObject( mal );
 
         oos.close();
 
         ObjectInputStream ois = new ObjectInputStream(
-                new FileInputStream("data.obj")); // Decorator Design Pattern
+                new FileInputStream("data.judah")); // Decorator Design Pattern
 
-        obj = ois.readObject();
+        Object obj = ois.readObject();
 
         ois.close();
 
-        Zigwig s = (Zigwig) obj;
-        System.out.println(obj);
+        //Zigwig s = (Zigwig) obj;
+        System.out.println( ((MAL)obj).size);
     }
 }
