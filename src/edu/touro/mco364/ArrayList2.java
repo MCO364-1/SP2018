@@ -9,14 +9,15 @@ public class ArrayList2 implements Serializable
 {
     //private static final long serialVersionUID = 868345258142892189L;
     transient String [] bs = new String[100];
-    int size;
+    transient int size;
 
     // custom serialiation (the physical structure is not equal to logical structure)
     private void writeObject(java.io.ObjectOutputStream out)
             throws IOException
     {
         out.defaultWriteObject();
-      //  out.write(size);
+       // out.writeObject(size);
+        out.writeInt(size);
         for (int i=0;i<size;i++)
             out.writeObject(bs[i]);
     }
@@ -25,7 +26,8 @@ public class ArrayList2 implements Serializable
             throws IOException, ClassNotFoundException {
 
         in.defaultReadObject();
-      //  size = in.readInt();
+        size = in.readInt();
+     //   in.readByte();
         bs = new String[size];
 
         for (int i = 0; i < size; i++)
